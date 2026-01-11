@@ -1,0 +1,169 @@
+[gd_scene load_steps=14 format=3 uid="uid://3aih4558xsf3"]
+
+[ext_resource type="Script" uid="uid://31fy5rs5ay3l" path="res://rynna_manager.gd" id="1_manager"]
+[ext_resource type="Script" uid="uid://cht7lx6hhv16t" path="res://player.gd" id="2_player"]
+[ext_resource type="PackedScene" path="res://rampa_podejscie.tscn" id="3_podejscie"]
+[ext_resource type="PackedScene" path="res://swiatlo_punktowe.tscn" id="4_swiatlo"]
+[ext_resource type="PackedScene" path="res://magiczny_pyl.tscn" id="5_pyl"]
+[ext_resource type="PackedScene" path="res://post_process.tscn" id="6_postprocess"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+sky = SubResource("Sky_1")
+ambient_light_source = 2
+ambient_light_color = Color(0.6, 0.55, 0.5, 1)
+ambient_light_energy = 10.0
+tonemap_mode = 2
+tonemap_white = 6.0
+ssr_enabled = true
+ssr_max_steps = 64
+ssr_fade_in = 0.15
+ssr_fade_out = 2.0
+ssr_depth_tolerance = 0.2
+glow_enabled = true
+glow_levels/1 = 1.0
+glow_levels/2 = 1.0
+glow_levels/4 = 0.8
+glow_levels/5 = 0.5
+glow_intensity = 1.0
+glow_strength = 1.0
+glow_bloom = 0.2
+glow_blend_mode = 0
+glow_hdr_threshold = 0.9
+glow_hdr_scale = 2.0
+adjustment_enabled = true
+adjustment_brightness = 1.0
+adjustment_contrast = 1.1
+adjustment_saturation = 0.9
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(1, 0.95, 0.85, 1)
+volumetric_fog_emission = Color(0, 0, 0, 1)
+volumetric_fog_anisotropy = 0.6
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_korytarz"]
+albedo_color = Color(0.06, 0.05, 0.04, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kladka"]
+albedo_color = Color(0.08, 0.06, 0.05, 1)
+metallic = 0.1
+roughness = 0.85
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_dof"]
+dof_blur_far_enabled = true
+dof_blur_far_distance = 25.0
+dof_blur_far_transition = 15.0
+dof_blur_amount = 0.08
+
+[node name="Tunel" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 12)
+script = ExtResource("2_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_player")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+fov = 70.0
+attributes = SubResource("CameraAttributesPractical_dof")
+
+[node name="AmbientLight" type="OmniLight3D" parent="Player/Camera3D"]
+light_cull_mask = 1
+light_color = Color(1, 0.95, 0.8, 1)
+light_energy = 0.5
+omni_range = 8.0
+omni_attenuation = 1.5
+
+[node name="Flashlight" type="SpotLight3D" parent="Player/Camera3D"]
+light_cull_mask = 3
+light_color = Color(1, 0.98, 0.9, 1)
+light_energy = 3.0
+light_volumetric_fog_energy = 2.0
+shadow_enabled = true
+spot_range = 30.0
+spot_attenuation = 0.5
+spot_angle = 25.0
+spot_angle_attenuation = 0.8
+
+[node name="Podloga" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -60)
+use_collision = true
+size = Vector3(8, 0.2, 150)
+material = SubResource("StandardMaterial3D_korytarz")
+
+[node name="ScianaPrawa" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 5, -60)
+use_collision = true
+size = Vector3(0.2, 10, 150)
+material = SubResource("StandardMaterial3D_korytarz")
+
+[node name="ScianaLewa" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 5, -60)
+use_collision = true
+size = Vector3(0.2, 10, 150)
+material = SubResource("StandardMaterial3D_korytarz")
+
+[node name="Sufit" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.1, -60)
+size = Vector3(8, 0.2, 150)
+material = SubResource("StandardMaterial3D_korytarz")
+
+[node name="ScianaTylna" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 15)
+size = Vector3(8, 10, 0.2)
+material = SubResource("StandardMaterial3D_korytarz")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0.433013, -0.25, 0, 0.5, 0.866025, 0.5, -0.75, 0.433013, 0, 12, 0)
+light_energy = 2.0
+shadow_enabled = true
+
+[node name="Swiatlo1" parent="." instance=ExtResource("4_swiatlo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, 0)
+
+[node name="Swiatlo2" parent="." instance=ExtResource("4_swiatlo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, -25)
+
+[node name="Swiatlo3" parent="." instance=ExtResource("4_swiatlo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, -50)
+
+[node name="Swiatlo4" parent="." instance=ExtResource("4_swiatlo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, -80)
+
+[node name="Swiatlo5" parent="." instance=ExtResource("4_swiatlo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, -110)
+
+[node name="Rampa" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9, 0, 8)
+
+[node name="Podejscie" parent="Rampa" instance=ExtResource("3_podejscie")]
+
+[node name="Kladka" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9, 6, -75)
+use_collision = true
+size = Vector3(2, 0.3, 140)
+material = SubResource("StandardMaterial3D_kladka")
+
+[node name="RynnaManager" type="Node3D" parent="."]
+script = ExtResource("1_manager")
+
+[node name="MagicznyPyl" parent="." instance=ExtResource("5_pyl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -40)
+
+[node name="PostProcess" parent="." instance=ExtResource("6_postprocess")]
