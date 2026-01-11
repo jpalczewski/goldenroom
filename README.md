@@ -1,5 +1,7 @@
 # Golden Room
 
+[**🕹️ Play Now**](https://jpalczewski.github.io/goldenroom/)
+
 A vibe coding experiment exploring psychedelic/oneiric 3D reconstruction in Godot 4.5.
 
 ## About
