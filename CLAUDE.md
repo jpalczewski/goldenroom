@@ -193,6 +193,22 @@ Subtlene pulsowanie, ciepłe tony, organiczne ruchy.
 - Subtelność > intensywność dla efektów psychodelicznych
 - Slow motion (0.12 cycles/s = 8s) lepsze niż szybkie dla sennej atmosfery
 
+**Code Language:**
+- All variable names, function names, comments, and documentation must be in **English**
+- This includes: GDScript code, shader comments, scene descriptions in code, docstrings
+- File names must also be in **English** (new files and during refactoring)
+- Only this CLAUDE.md guidance document can remain in Polish
+
+**Commit Messages:**
+- Follow [Conventional Commits](https://www.conventionalcommits.org/) format
+- Format: `<type>(<scope>): <subject>`
+- Types: `feat`, `fix`, `refactor`, `docs`, `style`, `test`, `chore`, `perf`
+- Examples:
+  - `feat(player): add camera sway effect`
+  - `fix(lighting): fix pulsing light phase offset`
+  - `docs: update README with tech stack`
+  - `refactor(block_manager): optimize multimesh rendering`
+
 ## Godot Format Notes
 
 - `.tscn` files: text-based format (external resources, sub-resources, nodes)
