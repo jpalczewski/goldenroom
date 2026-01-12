@@ -66,13 +66,11 @@ func _create_multi_mesh():
 				var base_name = "W%d_%d" % [layer, i]
 				var is_anchor = (base_name == "W1_0" or base_name == "W10_0")
 
-				# Kierunek od srodka rynny
-				var center_x = start_position.x + 2.5
-				var direction = sign(x - center_x)
-				if direction == 0:
-					direction = 1.0
+				# All blocks move in same direction (wave effect, no center gap)
+				# Direction based on layer - alternating for organic feel
+				var direction = 1.0 if layer % 2 == 0 else -1.0
 				if is_anchor:
-					direction = 0.0  # Kotwice nie animuja
+					direction = 0.0  # Anchors don't animate
 
 				# Losowe parametry dla tego "weza"
 				var phase = randf() * TAU * 10.0
@@ -98,6 +96,7 @@ func _create_multi_mesh():
 	_update_shader_parameters()
 
 func _create_box_mesh() -> BoxMesh:
+	# Use standard BoxMesh - facet variation done in shader via UV
 	var mesh = BoxMesh.new()
 	mesh.size = Vector3(0.47, 0.47, 0.47)
 
