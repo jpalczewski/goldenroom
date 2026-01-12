@@ -83,9 +83,9 @@ func _create_multi_mesh():
 					var z = rynna_z + tail_idx * 0.5
 
 					# Ustaw transform (static position - animation in shader)
-					var transform = Transform3D()
-					transform.origin = Vector3(x, y, z)
-					multi_mesh.set_instance_transform(idx, transform)
+					var block_transform = Transform3D()
+					block_transform.origin = Vector3(x, y, z)
+					multi_mesh.set_instance_transform(idx, block_transform)
 
 					# Set custom data for shader: direction, phase, speed
 					# Packed into Color (r, g, b, a)
