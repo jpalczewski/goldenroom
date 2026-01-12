@@ -28,20 +28,40 @@ Subtlene pulsowanie, ciepłe tony, organiczne ruchy.
 ## Running the Project
 
 - Open in Godot 4.5 editor or run with `godot --path .`
-- Main scene: `menu.tscn` (start screen z obracajacym sie klockiem)
-- Game scene: `scena.tscn` (glowny tunel)
+- Main scene: `scenes/menu/menu.tscn` (start screen z obracajacym sie klockiem)
+- Game scene: `scenes/main_tunnel.tscn` (glowny tunel)
+
+## Project Structure
+
+```
+goldenroom/
+├── scenes/           # All .tscn scene files
+│   ├── environment/  # Geometry and environment elements
+│   ├── lighting/     # Light sources
+│   ├── effects/      # Visual effects and post-processing
+│   ├── menu/         # Menu scenes
+│   └── main_tunnel.tscn
+├── scripts/          # All .gd script files
+│   ├── player/       # Player controller
+│   ├── managers/     # System managers (block generation, etc.)
+│   ├── lighting/     # Light behavior scripts
+│   └── ui/           # UI scripts
+└── shaders/          # All .gdshader files
+    ├── environment/  # Object shaders
+    └── post_processing/  # Screen-space effects
+```
 
 ## File Structure
 
-### Core Geometry
+### Environment
 
-**klocek.tscn**
+**scenes/environment/golden_block.tscn**
 - Podstawowy element: 0.47³ zloty metaliczny blok
 - MeshInstance3D z StandardMaterial3D
 - Metallic=1.0, roughness=0.2, emission enabled (0.15 energy)
 - Rozmiar 0.47 zamiast 0.5 tworzy widoczne szczeliny
 
-**rynna_manager.gd**
+**scripts/managers/trough_manager.gd**
 - Generuje cala rynne jako jeden MultiMeshInstance3D (optimization!)
 - 16,500 klockow (300 segmentow × 55 klockow/segment)
 - Oddychajaca animacja: przesuwa klocki w osi X (sinusoida)
@@ -51,8 +71,9 @@ Subtlene pulsowanie, ciepłe tony, organiczne ruchy.
   - Zmienia emission i albedo jednoczesnie
 - Struktura: 10 warstw (10,9,8,7,6,5,4,3,2,1 klockow), każda x3 glebokosci (TAIL_DEPTH)
 - Kolizje: StaticBody3D z BoxShape3D dla kazdej warstwy
+- GPU-based animation via shaders/environment/block_shader.gdshader
 
-**rampa_podejscie.tscn**
+**scenes/environment/entrance_ramp.tscn**
 - Pochyla rampa prowadzaca na kladke/rynne
 - CSGBox3D: 2×0.3×14, obrocony ~26° (skos)
 - Polaczone z glowna scena w pozycji (2.9, 0, 8)
@@ -60,13 +81,14 @@ Subtlene pulsowanie, ciepłe tony, organiczne ruchy.
 
 ### Lighting System
 
-**swiatlo_punktowe.tscn**
-- Reusable sufit light (5 instancji w scena.tscn)
+**scenes/lighting/point_light.tscn**
+- Reusable sufit light (5 instancji w scenes/main_tunnel.tscn)
 - CSGSphere3D "zarowka" z emisja (emission_energy 4.0)
 - OmniLight3D z cieniami (shadow_enabled)
 - Pozycja: y=9.5 (blisko sufitu na y=10.1)
+- Attached script: scripts/lighting/pulsing_light.gd
 
-**swiatlo_pulsujace.gd** (attached to swiatlo_punktowe.tscn)
+**scripts/lighting/pulsing_light.gd** (attached to scenes/lighting/point_light.tscn)
 - **Pulsing**: sinusoidalne "oddychanie" swiatel (0.12 cycles/s = 8s cykl)
   - energy: 3.5-5.0
   - emission: 5.0-8.0
@@ -80,7 +102,7 @@ Subtlene pulsowanie, ciepłe tony, organiczne ruchy.
 
 ### Post-Processing & Effects
 
-**chromatic_aberration.gdshader**
+**shaders/post_processing/chromatic_aberration.gdshader**
 - Screen-space shader: radialne rozdzielenie RGB
 - **Chromatic aberration**: silniejsze na krawedziach (aberration_center_falloff=1.2)
 - **Vignette**: ciemniejsze rogi dla "tunnel vision"
@@ -88,13 +110,13 @@ Subtlene pulsowanie, ciepłe tony, organiczne ruchy.
   - vignette_smoothness = 0.45
 - Shader type: canvas_item, uzywa screen_texture
 
-**post_process.tscn**
+**scenes/effects/post_process.tscn**
 - CanvasLayer (layer=100) z ColorRect
-- ShaderMaterial uzywajacy chromatic_aberration.gdshader
+- ShaderMaterial uzywajacy shaders/post_processing/chromatic_aberration.gdshader
 - Anchors preset 15 (full screen)
 - mouse_filter=2 (ignore, nie blokuje input)
 
-**magiczny_pyl.tscn**
+**scenes/effects/magical_dust.tscn**
 - GPUParticles3D: 500 czasteczek kurzu/pylu
 - Emisyjny material (emission_energy=3.0)
 - Turbulencja dla organicznego ruchu
@@ -103,7 +125,7 @@ Subtlene pulsowanie, ciepłe tony, organiczne ruchy.
 
 ### Player & Camera
 
-**player.gd** (attached to CharacterBody3D w scena.tscn)
+**scripts/player/player.gd** (attached to CharacterBody3D w scenes/main_tunnel.tscn)
 - FPS controller: WASD movement, mouse look
 - Flashlight toggle (F key)
 - **Camera sway**: delikatne kolysanie kamery dla efektu "unoszenia sie"
@@ -115,7 +137,7 @@ Subtlene pulsowanie, ciepłe tony, organiczne ruchy.
 
 ### Main Scenes
 
-**scena.tscn**
+**scenes/main_tunnel.tscn**
 - Glowna scena gry: tunel 150 jednostek dlugi
 - **Environment**:
   - Volumetric fog (density=0.02, albedo=ciepły złoty)
@@ -129,29 +151,30 @@ Subtlene pulsowanie, ciepłe tony, organiczne ruchy.
   - Kladka (walkway) na y=6: 2 szerokie, 140 dlugie
 - **Lights**:
   - DirectionalLight3D: ogolne oswietlenie (energy=2.0)
-  - 5× swiatlo_punktowe instances wzdluz tunelu (z=0,-25,-50,-80,-110)
+  - 5× scenes/lighting/point_light.tscn instances wzdluz tunelu (z=0,-25,-50,-80,-110)
 - **Camera**:
   - CameraAttributesPractical: Depth of Field
     - dof_blur_far_enabled=true, distance=25.0, transition=15.0
     - dof_blur_amount=0.08 (senna mglistosc)
-- Nodes: Player, RynnaManager, Rampa, MagicznyPyl, PostProcess
+- Nodes: Player (scripts/player/player.gd), TroughManager (scripts/managers/trough_manager.gd), EntranceRamp (scenes/environment/entrance_ramp.tscn), MagicalDust (scenes/effects/magical_dust.tscn), PostProcess (scenes/effects/post_process.tscn)
 
-**menu.tscn**
+**scenes/menu/menu.tscn**
 - Ekran startowy z UI + 3D background
-- SubViewportContainer → SubViewport → menu_background.tscn (3D scene)
+- SubViewportContainer → SubViewport → scenes/menu/menu_background.tscn (3D scene)
 - UI: Title "GOLDEN ROOM", controls panel, START GAME button
 - Zloty styl (borders, hover effects) pasujacy do tunelu
+- Attached script: scripts/ui/menu.gd
 
-**menu_background.tscn**
+**scenes/menu/menu_background.tscn**
 - Mini-pokój 4×3×4 z jednym klockiem
-- Obracajacy sie klocek (AnimationPlayer, 40s cycle)
-- Pulsujace swiatlo nad nim (swiatlo_punktowe instance)
+- Obracajacy sie klocek (AnimationPlayer, 40s cycle) - scenes/environment/golden_block.tscn instance
+- Pulsujace swiatlo nad nim - scenes/lighting/point_light.tscn instance
 - RimLight (DirectionalLight3D z boku) dla cieni
 - Floor + 4 sciany + ceiling (ciemny material)
 - Kamera ustawiona pod katem (1.5, 1.5, 2)
 
-**menu.gd**
-- Simple: button.pressed → change_scene_to_file("res://scena.tscn")
+**scripts/ui/menu.gd**
+- Simple: button.pressed → change_scene_to_file("res://scenes/main_tunnel.tscn")
 
 ## Key Settings
 
@@ -183,9 +206,9 @@ Subtlene pulsowanie, ciepłe tony, organiczne ruchy.
 - Context7 zwraca aktualne code snippets i property descriptions - używaj tego zamiast zgadywania
 
 **Optymalizacja:**
-- MultiMesh dla dużych ilości identycznych obiektów (jak rynna_manager.gd)
+- MultiMesh dla dużych ilości identycznych obiektów (jak scripts/managers/trough_manager.gd)
 - Shared materials - color shift zmienia jeden wspólny materiał zamiast 16,500 osobnych
-- SubViewport dla 3D backgrounds w UI (menu_background.tscn)
+- SubViewport dla 3D backgrounds w UI (scenes/menu/menu_background.tscn)
 - Particles z turbulencją zamiast wielu skryptowanych obiektów
 
 **Stylizacja:**
