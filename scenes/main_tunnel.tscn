@@ -1,11 +1,11 @@
 [gd_scene load_steps=14 format=3 uid="uid://3aih4558xsf3"]
 
-[ext_resource type="Script" uid="uid://31fy5rs5ay3l" path="res://rynna_manager.gd" id="1_manager"]
-[ext_resource type="Script" uid="uid://cht7lx6hhv16t" path="res://player.gd" id="2_player"]
-[ext_resource type="PackedScene" path="res://rampa_podejscie.tscn" id="3_podejscie"]
-[ext_resource type="PackedScene" path="res://swiatlo_punktowe.tscn" id="4_swiatlo"]
-[ext_resource type="PackedScene" path="res://magiczny_pyl.tscn" id="5_pyl"]
-[ext_resource type="PackedScene" path="res://post_process.tscn" id="6_postprocess"]
+[ext_resource type="Script" uid="uid://31fy5rs5ay3l" path="res://scripts/managers/trough_manager.gd" id="1_manager"]
+[ext_resource type="Script" uid="uid://cht7lx6hhv16t" path="res://scripts/player/player.gd" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/environment/entrance_ramp.tscn" id="3_podejscie"]
+[ext_resource type="PackedScene" path="res://scenes/lighting/point_light.tscn" id="4_swiatlo"]
+[ext_resource type="PackedScene" path="res://scenes/effects/magical_dust.tscn" id="5_pyl"]
+[ext_resource type="PackedScene" path="res://scenes/effects/post_process.tscn" id="6_postprocess"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 

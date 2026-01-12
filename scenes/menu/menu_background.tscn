@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://menu_bg"]
 
-[ext_resource type="PackedScene" path="res://klocek.tscn" id="1_klocek"]
-[ext_resource type="PackedScene" path="res://swiatlo_punktowe.tscn" id="2_light"]
+[ext_resource type="PackedScene" path="res://scenes/environment/golden_block.tscn" id="1_klocek"]
+[ext_resource type="PackedScene" path="res://scenes/lighting/point_light.tscn" id="2_light"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.08, 0.06, 0.04, 1)

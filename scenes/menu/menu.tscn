@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://main_menu"]
 
-[ext_resource type="Script" path="res://menu.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://menu_background.tscn" id="2_bg"]
+[ext_resource type="Script" path="res://scripts/ui/menu.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/menu/menu_background.tscn" id="2_bg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_normal"]
 bg_color = Color(0.15, 0.12, 0.08, 0.8)

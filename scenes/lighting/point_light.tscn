@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://swiatlo_punktowe"]
 
-[ext_resource type="Script" path="res://swiatlo_pulsujace.gd" id="1_pulse"]
+[ext_resource type="Script" path="res://scripts/lighting/pulsing_light.gd" id="1_pulse"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_zarowka"]
 albedo_color = Color(1, 0.9, 0.7, 1)

@@ -1,6 +1,6 @@
 extends Control
 
-const SCENE_PATH = "res://scena.tscn"
+const SCENE_PATH = "res://scenes/main_tunnel.tscn"
 
 @onready var start_button: Button = $UI/CenterContainer/VBoxContainer/StartButton
 @onready var loading_overlay: ColorRect = $LoadingOverlay

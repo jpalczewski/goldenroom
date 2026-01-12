@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://post_process"]
 
-[ext_resource type="Shader" path="res://chromatic_aberration.gdshader" id="1_shader"]
+[ext_resource type="Shader" path="res://shaders/post_processing/chromatic_aberration.gdshader" id="1_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_chromatic"]
 shader = ExtResource("1_shader")

@@ -102,7 +102,7 @@ func _create_box_mesh() -> BoxMesh:
 	mesh.size = Vector3(0.47, 0.47, 0.47)
 
 	# Load and setup shader material
-	var shader = load("res://klocek_shader.gdshader")
+	var shader = load("res://shaders/environment/block_shader.gdshader")
 	shader_material = ShaderMaterial.new()
 	shader_material.shader = shader
 
